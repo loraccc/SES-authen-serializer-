@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.conf import settings
+
 
 # Create your views here.
 from django.shortcuts import render, redirect
@@ -178,7 +180,12 @@ def student_create(request):
         std_obj.shift = request.POST.get("shift")
         std_obj.remarks = request.POST.get("remarks")
         std_obj.save()
-    
+        subject = 'User Created Successfully'
+        message = 'Congratulations! Your account has been created.'
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = ['carolacharya1@gmail.com']
+
+        send_mail(subject, message, from_email, recipient_list)
         context.setdefault("msg", "Student Added Successfully")
 
     return render(request, "students/create.html", context)
