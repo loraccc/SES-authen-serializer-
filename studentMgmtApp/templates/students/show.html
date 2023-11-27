@@ -1,0 +1,50 @@
+
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %}
+Student | SHOW
+{% endblock %}
+
+{% block body_content %}
+<div class="container">
+    <h1>Student SHOW | SES</h1>
+    <hr>
+    <a href="{% url 'students.index' %}" class="btn btn-primary mb-2">BACK</a>
+    <div class="card">
+        <div class="card-header">
+            <h3>{{ data.first_name }} {{ data.middle_name }} {{ data.last_name }}</h3>
+        </div>
+        <div class="card-body">
+            <h3>Basic Information</h3>
+            <hr>
+            <h5>{{ data.email }}</h5>
+            <h5>{{ data.contact }}</h5>
+            <h5>{{ data.blood_group }}</h5>
+            <h5>{{ data.gender }}</h5>
+            <br>
+            <h3>Academic Information</h3>
+            <hr>
+            <h5>{{ data.academic_level }}</h5>
+            <h5>{{ data.academic_status }}</h5>
+            <h5>{{ data.academic_org }}</h5>
+            <h5>{{ data.academic_score }}</h5>
+            <br>
+            <h3>Course Information</h3>
+            <hr>
+            <h5>{{ data.course }}</h5>
+            <h5>{{ data.intake }}</h5>
+            <h5>{{ data.shift }}</h5>
+            <h5>{{ data.remarks }}</h5>
+            <h5>{{ data.visited_at }}</h5>
+            <h5>{{ data.course }}</h5>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+

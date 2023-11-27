@@ -1,0 +1,28 @@
+
+{% extends "layouts/base.html" %}
+{% block title %}Student | CREATE{% endblock %}
+{% block body_content %}
+<div class="container">
+    <h1>Student CREATE | SES</h1>
+    <hr>
+    <a href="{% url 'students.index' %}" class="btn btn-primary mb-2">BACK</a>
+    {% if msg %}
+    <div class="alert alert-success" role="alert">
+        {{ msg }}
+    </div>
+    {% endif %}
+    <div class="card">
+        <div class="card-header">
+        <h2>Student Enquiry Form | SES
+        </h2>    
+        </div>
+        <div class="card-body">
+            <form action="{% url 'students.create' %}" method="POST">
+                {% csrf_token %}
+                {{ temp_form.as_p }}
+                <input type="submit" class="btn btn-primary" value="ADD STUDENT">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

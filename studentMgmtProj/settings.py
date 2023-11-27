@@ -33,13 +33,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'studentMgmtApp',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'studentMgmtApp',
     'rest_framework',
     'authentication',
 ]
@@ -59,7 +60,7 @@ ROOT_URLCONF = 'studentMgmtProj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'studentMgmtApp/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -92,6 +93,14 @@ DATABASES = {
     #     'PASSWORD': '',
     #     'PORT': '3306',
     # }
+
+#     'default': {#         
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'studentenquirysystem',
+#         'HOST': 'localhost',
+#         'USER': 'postgres',
+#         'PASSWORD': '1234',
+#         'PORT': '5432',#     }# }
     
 
 

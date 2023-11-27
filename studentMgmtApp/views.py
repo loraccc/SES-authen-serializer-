@@ -182,7 +182,7 @@ def student_create(request):
         context.setdefault("msg", "Student Added Successfully")
 
     return render(request, "students/create.html", context)
-    
+    # /Users/carolacharya/Desktop/MYSES/studentMgmtProj/templates/students/create.html
 # @login_required(login_url="/authentication/login")
 def student_update(request):
     if not request.session.has_key("session_email"):
