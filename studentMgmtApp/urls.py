@@ -11,8 +11,8 @@ urlpatterns = [
     path("students/delete/<int:id>/", views.student_delete, name="students.delete"),
 
     # user
-    # path("users/register/", views.user_register, name="users.register"),
-    # path("users/login/", views.user_login, name="users.login"),
+    path("users/register/", views.user_register, name="users.register"),
+    path("users/login/", views.user_login, name="users.login"),
 
     # api urls
     path("api/students/", StudentApiView.as_view()),

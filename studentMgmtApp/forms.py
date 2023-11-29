@@ -4,6 +4,7 @@ from .models import AppUser, Student, Course
 class UserRegisterForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
     class Meta:
+        # fields='__all__'
         fields = ("full_name", "email", "password", "usertype", "contact")
         model = AppUser
 

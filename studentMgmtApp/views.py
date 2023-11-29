@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.conf import settings
-
-
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate,login
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 # Create your views here.
 from django.shortcuts import render, redirect
 from .forms import StudentCreateForm, CourseCreateForm, UserRegisterForm, UserLoginForm
@@ -112,39 +113,80 @@ class StudentIdApiView(APIView):
         return Response({"msg": "Data deleted"}, status=status.HTTP_200_OK)
             
 # Create your views here.
+# def user_register(request):
+#     reg_form = UserRegisterForm()
+#     context = {"form": reg_form}
+#     if request.method == "POST":
+#         user_form_data = UserRegisterForm(request.POST)
+#         if user_form_data.is_valid():
+#             user_form_data.save()
+#             send_mail(
+#                 "User Registration", # subject
+#                 "Congratulations! Your account has been created", # message
+#                 "c4crypt@gmail.com", # sender
+#                 [request.POST.get('email')] # receiver
+#             )
+#             return redirect("users.login")
+#         else:
+#             return redirect("users.register")
+#     return render(request, "users/register.html", context)
+
+
 def user_register(request):
-    reg_form = UserRegisterForm()
-    context = {"form": reg_form}
+    reg_form = UserCreationForm()
+
     if request.method == "POST":
-        user_form_data = UserRegisterForm(request.POST)
-        if user_form_data.is_valid():
-            user_form_data.save()
-            send_mail(
-                "User Registration", # subject
-                "Congratulations! Your account has been created", # message
-                "c4crypt@gmail.com", # sender
-                [request.POST.get('email')] # receiver
-            )
-            return redirect("users.login")
-        else:
-            return redirect("users.register")
+        reg_form = UserCreationForm(request.POST)
+        if reg_form.is_valid():
+            user = reg_form.save()
+            login(request, user)  # Log in the user after registration
+            return redirect("students.index")
+
+    context = {"form": reg_form}
     return render(request, "users/register.html", context)
 
 def user_login(request):
-    login_form = UserLoginForm()
+    login_form = AuthenticationForm()
     context = {"form": login_form}
+
     if request.method == "POST":
-        req_email = request.POST.get("email")
-        req_password = request.POST.get("password")
-        user_data = AppUser.objects.get(email=req_email)
-        if user_data.email == req_email and user_data.password == req_password:
-            request.session["session_email"] = user_data.email
+        login_form = AuthenticationForm(data=request.POST)
+
+        if login_form.is_valid():
+            # Authentication successful, log in the user
+            user = login_form.get_user()
+            login(request, user)
             return redirect("students.index")
         else:
+            # Authentication failed, redirect to login page
             return redirect("users.login")
+
     return render(request, "users/login.html", context)
+# def user_login(request):
+#     login_form = UserLoginForm()
+#     context = {"form": login_form}
+
+#     if request.method == "POST":
+#         req_email = request.POST.get("email")
+#         req_password = request.POST.get("password")
+
+#         # Authenticate using the custom user model
+#         user = authenticate(request, email=req_email, password=req_password)
+
+#         if user is not None:
+#             print("Login successful. Redirecting to students.index")
+#             login(request, user)
+#             return redirect("students.index")
+#         else:
+#             print("Login failed. Redirecting to users.login")
+#             return redirect("users.login")
+
+#     return render(request, "users/login.html", context)
+
 
 # @login_required(login_url="/authentication/login")
+# @login_required(login_url="/ses/users/login/") 
+@login_required(login_url='/users/login/')  
 def student_index(request):
     # if not request.session.has_key("session_email"):
     #     return redirect("users.login")
@@ -153,6 +195,8 @@ def student_index(request):
     return render(request, "students/index.html", context)
 
 # @login_required(login_url="/authentication/login")
+@login_required(login_url='/users/login/')  
+
 def student_create(request):
     # if not request.session.has_key("session_email"):
     #     return redirect("users.login")

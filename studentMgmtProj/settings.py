@@ -146,6 +146,20 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "studentMgmtProj/studentMgmtProj/static"),
 ]
 
+# AUTHENTICATION_BACKENDS = [
+#     'path.to.YourCustomBackend',
+#     'django.contrib.auth.backends.ModelBackend',
+# ]
+# AUTH_USER_MODEL = 'studentMgmtApp.AppUser'   'appName,modelName'
+# settings.py
+AUTH_USER_MODEL = 'auth.User'
+
+
+LOGIN_URL = 'users.login'
+
+
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
