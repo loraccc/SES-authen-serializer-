@@ -51,7 +51,7 @@ Student | INDEX
                         <td>{{ val.visited_at }}</td>
                         <td>{{ val.remarks }}</td>
                         <td><a href="{% url 'students.show' val.id %}">Show</a></td>
-                        <td><a href="{% url 'students.edit' val.id %}">Edit</a></td>
+                        <td><a href="{% url 'students_edit' val.id %}">Edit</a></td>
                         <td><a href="{% url 'students.delete' val.id %}">Delete</a></td>
                     </tr>
                     {% endfor %}

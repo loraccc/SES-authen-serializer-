@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate,login
@@ -29,25 +29,11 @@ class StudentApiView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK) # returning response
     
     def post(self, request):
-        data = {
-            "first_name": request.data.get("first_name"),
-            "middle_name":request.data.get("middle_name"),
-            "last_name": request.data.get("last_name"),
-            "email": request.data.get("email"),
-            "contact": request.data.get("contact"),
-            "gender": request.data.get("gender"),
-            "blood_group": request.data.get("blood_group"),
-            "academic_level": request.data.get("academic_level"),
-            "academic_status": request.data.get("academic_status"),
-            "academic_org": request.data.get("academic_org"),
-            "academic_score": request.data.get("academic_score"),
-            "course": request.data.get("course_id"),
-            "intake": request.data.get("intake"),
-            "shift": request.data.get("shift"),
-            "remarks": request.data.get("remarks"),
-        }
+        
 
-        serializer = StudentSerializer(data=data)
+        all_data = request.POST.dict()
+
+        serializer = StudentSerializer(data={*all_data})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -56,18 +42,18 @@ class StudentApiView(APIView):
 
 class StudentIdApiView(APIView):
 
-    def get_object(self, id):
-        try:
-            data = Student.objects.get(id=id)
-            return data
-        except Student.DoesNotExist:
-            return None
+    # def get_object(self, id):
+    #     try:
+    #         data = Student.objects.get(id=id)
+    #         return data
+    #     except Student.DoesNotExist:
+    #         return None
     
     def get(self, request, id):
-        std_instance = self.get_object(id)
+        std_instance = get_object_or_404(Student, id=id)
 
-        if not std_instance:
-            return Response({"error": "Data not found"}, status=status.HTTP_404_NOT_FOUND)
+        # if not std_instance:
+        #     return Response({"error": "Data not found"}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = StudentSerializer(std_instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -105,6 +91,7 @@ class StudentIdApiView(APIView):
     
     def delete(self, request, id):
         std_instance = self.get_object(id)
+        # Student.objects.filter(id=id).delete()
 
         if not std_instance:
             return Response({"error": "Data not found"}, status=status.HTTP_404_NOT_FOUND)
@@ -139,11 +126,14 @@ def user_register(request):
         reg_form = UserCreationForm(request.POST)
         if reg_form.is_valid():
             user = reg_form.save()
+            
             login(request, user)  # Log in the user after registration
             return redirect("students.index")
 
     context = {"form": reg_form}
     return render(request, "users/register.html", context)
+
+from django.contrib import messages
 
 def user_login(request):
     login_form = AuthenticationForm()
@@ -153,15 +143,26 @@ def user_login(request):
         login_form = AuthenticationForm(data=request.POST)
 
         if login_form.is_valid():
-            # Authentication successful, log in the user
             user = login_form.get_user()
             login(request, user)
+
+            # Print information to the console for debugging
+            print(f"User {user.username} successfully logged in.")
+            print(f"User email: {user.email}")
+
+            messages.success(request, 'Login successful.')
             return redirect("students.index")
         else:
-            # Authentication failed, redirect to login page
-            return redirect("users.login")
+            # Print errors to the console for debugging
+            print("Login failed. Errors:")
+            for field, errors in login_form.errors.items():
+                print(f"{field}: {', '.join(errors)}")
+
+            messages.error(request, 'Login failed. Please check your credentials.')
+            return render(request, "users/login.html", context)
 
     return render(request, "users/login.html", context)
+
 # def user_login(request):
 #     login_form = UserLoginForm()
 #     context = {"form": login_form}
@@ -196,7 +197,6 @@ def student_index(request):
 
 # @login_required(login_url="/authentication/login")
 @login_required(login_url='/users/login/')  
-
 def student_create(request):
     # if not request.session.has_key("session_email"):
     #     return redirect("users.login")
@@ -261,23 +261,26 @@ def student_update(request):
     return redirect("students.index")
 
 def student_show(request, id):
-    if not request.session.has_key("session_email"):
-        return redirect("users.login")
+    # if not request.session.has_key("session_email"):
+    #     return redirect("users.login")
     data = Student.objects.get(id=id)
     context = {"data": data}
     return render(request, "students/show.html", context)
 
+
+@login_required(login_url='/users/login/')  
 def student_edit(request, id):
-    if not request.session.has_key("session_email"):
-        return redirect("users.login")
+    # request.SESSION= "Asdasd"
+    # if not request.session.has_key("session_email"):
+    #     return redirect("users.login")
     data = Student.objects.get(id=id)
     courses = Course.objects.all()
     context = {"data": data, "courses": courses}
     return render(request, "students/edit.html", context)
 
 def student_delete(request, id):
-    if not request.session.has_key("session_email"):
-        return redirect("users.login")
+    # if not request.session.has_key("session_email"):
+    #     return redirect("users.login")
     data = Student.objects.get(id=id)
     data.delete()
     return redirect("students.index")
