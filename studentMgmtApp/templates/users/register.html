@@ -12,6 +12,8 @@
         {{ form.errors }}
         {{ form.as_p }}
         <button type="submit">Register</button>
+        <p><strong>-- OR --</strong></p>
+    <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
     </form>
 </body>
 </html>

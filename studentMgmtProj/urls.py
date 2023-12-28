@@ -18,8 +18,15 @@ from django.contrib import admin
 from django.urls import path,include
 
 urlpatterns = [
+    #admin
     path('admin/', admin.site.urls),
+    #Students
     path('ses/', include('studentMgmtApp.urls')),
+    
     path('authentication/', include('authentication.urls')),
     path('api-auth/', include('rest_framework.urls')),
+
+    #social
+    path('oauth/', include('social_django.urls', namespace='social')),
+
 ]

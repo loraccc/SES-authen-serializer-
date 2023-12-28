@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'studentMgmtApp',
     'rest_framework',
     'authentication',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'studentMgmtProj.urls'
@@ -68,6 +70,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',  
+                'social_django.context_processors.login_redirect', 
             ],
         },
     },
@@ -145,11 +149,13 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "project_ses/static"),
     os.path.join(BASE_DIR, "studentMgmtProj/studentMgmtProj/static"),
 ]
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
-# AUTHENTICATION_BACKENDS = [
-#     'path.to.YourCustomBackend',
-#     'django.contrib.auth.backends.ModelBackend',
-# ]
 # AUTH_USER_MODEL = 'studentMgmtApp.AppUser'   'appName,modelName'
 # settings.py
 AUTH_USER_MODEL = 'auth.User'
@@ -178,3 +184,7 @@ EMAIL_PORT = 587 # TLS Port number
 EMAIL_USE_TLS = True # protocol
 EMAIL_HOST_USER = "carolacharya1@gmail.com" # gmail 
 EMAIL_HOST_PASSWORD = "tgbs xxbu jgod qqcp " # App password
+
+#facebook 
+SOCIAL_AUTH_FACEBOOK_KEY = '923093825846133'  
+SOCIAL_AUTH_FACEBOOK_SECRET = 'f9bc6693249f98892e0850dbedb3c983' 

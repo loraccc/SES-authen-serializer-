@@ -11,7 +11,7 @@ Student | EDIT
     <hr>
     <a href="{% url 'students.index' %}" class="btn btn-primary mb-2">BACK</a>
     <div class="card">
-        <form action="{% url 'students.update' %}" method="POST">
+        <form action="{% url 'students.update' id=data.id%}" method="POST">
             {% csrf_token %}
             <div class="card-header">
                 <h3>Student Data Update</h3>

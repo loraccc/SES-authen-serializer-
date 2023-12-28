@@ -22,6 +22,14 @@ from django.contrib.auth.models import User
 
 from .decorators import unautheniticated_user
 
+
+#social login
+from django.shortcuts import render
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+class HomeView(LoginRequiredMixin, TemplateView):
+    template_name = "students/index.html" 
 # api views with Class Based views
 class StudentApiView(APIView):
     # get method to get list of data i.e students' list
@@ -241,13 +249,14 @@ def student_create(request):
 
     return render(request, "students/create.html", context)
     # /Users/carolacharya/Desktop/MYSES/studentMgmtProj/templates/students/create.html
-# @login_required(login_url="/authentication/login")
-def student_update(request):
-    if not request.session.has_key("session_email"):
-        return redirect("users.login")
+@login_required(login_url="ses/users/login")
+
+def student_update(request,id):
+    # if not request.session.has_key("session_email"):
+    #     return redirect("users.login")
     if request.method == "POST":
         course = Course.objects.get(id=request.POST.get("course_id"))
-        std_obj = Student.objects.get(id=request.POST.get('id'))
+        std_obj = Student.objects.get(id=id)
         std_obj.first_name = request.POST.get("first_name")
         std_obj.middle_name = request.POST.get("middle_name")
         std_obj.last_name = request.POST.get("last_name")
