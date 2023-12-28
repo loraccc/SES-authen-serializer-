@@ -55,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django_session_timeout.middleware.SessionTimeoutMiddleware',
 ]
 
 ROOT_URLCONF = 'studentMgmtProj.urls'
@@ -176,8 +178,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
+#SESSIONTIME
+SESSION_EXPIRE_SECONDS = 10
 
-
+#EMAIL BACKEND
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com" # google mail server
 EMAIL_PORT = 587 # TLS Port number
@@ -188,3 +192,7 @@ EMAIL_HOST_PASSWORD = "tgbs xxbu jgod qqcp " # App password
 #facebook 
 SOCIAL_AUTH_FACEBOOK_KEY = '923093825846133'  
 SOCIAL_AUTH_FACEBOOK_SECRET = 'f9bc6693249f98892e0850dbedb3c983' 
+#Github
+SOCIAL_AUTH_GITHUB_KEY='f2c317f35bd91680babd'
+SOCIAL_AUTH_GITHUB_SECRET='A6f26649abb74750b6b13969473ad3ca83ff3952a' 
+SOCIAL_AUTH_GITHUB_REDIRECT_URI = 'http://localhost:8000/oauth/complete/github/'
