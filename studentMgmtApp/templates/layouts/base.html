@@ -44,7 +44,7 @@
                     <li><a class="dropdown-item" href="#">Another action</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
-                        <form action="{% url 'logout' %}" method="post">
+                        <form action="{% url 'user.logout' %}" method="post">
                             {% csrf_token %}
                             <input type="submit" class="btn btn-secondary col-12" value="LOGOUT">
                         </form>

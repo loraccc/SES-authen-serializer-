@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 # Create your views here.
 from django.shortcuts import render, redirect
@@ -17,8 +17,10 @@ from .serializers import StudentSerializer, AppUserSerializer, CourseSerializer
 from rest_framework.request import Request
 import json
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,permission_required
 from django.contrib.auth.models import User
+
+from .decorators import unautheniticated_user
 
 # api views with Class Based views
 class StudentApiView(APIView):
@@ -163,6 +165,9 @@ def user_login(request):
 
     return render(request, "users/login.html", context)
 
+def user_logout(request):
+    logout(request)
+    return redirect('users.login')
 # def user_login(request):
 #     login_form = UserLoginForm()
 #     context = {"form": login_form}
@@ -187,7 +192,9 @@ def user_login(request):
 
 # @login_required(login_url="/authentication/login")
 # @login_required(login_url="/ses/users/login/") 
+# @unautheniticated_user
 @login_required(login_url='/users/login/')  
+@permission_required("studentMgmtProj.can_change_student")
 def student_index(request):
     # if not request.session.has_key("session_email"):
     #     return redirect("users.login")
@@ -260,6 +267,7 @@ def student_update(request):
     
     return redirect("students.index")
 
+@login_required(login_url='/users/login/')  
 def student_show(request, id):
     # if not request.session.has_key("session_email"):
     #     return redirect("users.login")

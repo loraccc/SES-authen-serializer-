@@ -155,7 +155,8 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = 'auth.User'
 
 
-# LOGIN_URL = 'users.login'
+# LOGIN_URL = '/users/login'
+# LOGIN_REDIRECT_URL = 'students.index'
 
 
 
